@@ -39,33 +39,37 @@ function RegisterPage() {
         }
     };
 
-    return <div>
-        <h1>Register</h1>
-        <form onSubmit={handleSubmit}>
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            <button type="submit">Register</button>
-        </form>
+    return (
         <div>
-            <p>Already have an account? <a href="/login">Login</a></p>
+            <h1>Register</h1>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button type="submit">Register</button>
+            </form>
+            <div>
+                <p>
+                    Already have an account? <a href="/login">Login</a>
+                </p>
+            </div>
         </div>
-    </div>;
+    );
 }
 
 export default RegisterPage;

@@ -31,20 +31,22 @@ function LoginPage() {
                 <input
                     type="email"
                     placeholder="email"
+                    value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
                 <input
                     type="password"
                     placeholder="password"
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <button type="submit">Login</button>
             </form>
             <div>
-                <p>
-                    Don&apos;t have an account?{" "}
-                    <a href="/register">Register</a>
-                </p>
+                Don't have an account ?
+                <button onClick={() => router.push("/register")}>
+                    Register
+                </button>
             </div>
         </div>
     );
