@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useNotification } from "./components/Notification";
+import { useNotification } from "../components/Notification";
 
 export default function Home() {
     const { showNotification } = useNotification();
