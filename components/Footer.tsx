@@ -1,22 +1,25 @@
+// app/components/Footer.tsx
 "use client";
+
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function Footer() {
     return (
-        <footer className="footer p-6 bg-base-200 text-base-content">
-            <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+        <Card className="mt-8 bg-base-200">
+            <CardContent className="flex justify-between items-center">
                 <p>
                     © {new Date().getFullYear()} Video with AI — All rights
                     reserved.
                 </p>
-                <div className="flex gap-4">
-                    <a href="/privacy" className="hover:underline">
+                <div className="space-x-4">
+                    <a href="/privacy" className="text-primary hover:underline">
                         Privacy
                     </a>
-                    <a href="/terms" className="hover:underline">
+                    <a href="/terms" className="text-primary hover:underline">
                         Terms
                     </a>
                 </div>
-            </div>
-        </footer>
+            </CardContent>
+        </Card>
     );
 }
