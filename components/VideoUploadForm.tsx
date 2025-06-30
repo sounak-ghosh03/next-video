@@ -28,12 +28,14 @@ export default function VideoUploadForm() {
     const onSubmit = async (values: FormValues) => {
         setUploading(true);
         try {
-            const res = await fetch("/api/videos/upload", {
+            const res = await fetch("/api/video", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),
             });
-            if (!res.ok) throw new Error("Failed to upload video");
+            if (!res.ok) {
+                throw new Error("Failed to upload video");
+            }
             toast("Video uploaded successfully!");
             reset();
         } catch (err: any) {

@@ -44,75 +44,53 @@ export default function FileUpload({
         setError(null);
 
         try {
-            // const authRes = await fetch("/api/auth/imagekit-auth");
-            // const auth = await authRes.json();
+            // 1) Fetch once...
+            const authRes = await fetch("/api/auth/imagekit-auth");
 
-            // const res = await upload({
-            //     file,
-            //     fileName: file.name,
-            //     publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
-            //     signature: auth.signature,
-            //     expire: auth.expire,
-            //     token: auth.token,
-            // const { authenticationParameters, publicKey } =
-            //     await authRes.json();
+            // 2) Bail early if non-2xx
+            if (!authRes.ok) {
+                const errBody = await authRes.json().catch(() => ({}));
+                throw new Error(
+                    errBody.error || `ImageKit auth failed: ${authRes.status}`
+                );
+            }
 
-            // const { signature, expire, token } = authenticationParameters;
+            // 3) Parse JSON once and destructure
+            const data = await authRes.json();
+            const { authenticationParameters, publicKey } = data as {
+                authenticationParameters?: {
+                    signature: string;
+                    expire: number;
+                    token: string;
+                };
+                publicKey?: string;
+            };
 
-            // perform upload
-            // const res = await upload({
-            //     file,
-            //     fileName: file.name,
-            //     publicKey,
-            //     signature,
-            //     expire,
-            //     token,
-// 1) Fetch once...
-      const authRes = await fetch("/api/auth/imagekit-auth");
+            // 4) Guard against missing fields
+            if (
+                !authenticationParameters ||
+                !authenticationParameters.signature ||
+                !authenticationParameters.expire ||
+                !authenticationParameters.token ||
+                !publicKey
+            ) {
+                throw new Error("Invalid auth response from server");
+            }
 
-      // 2) Bail early if non-2xx
-      if (!authRes.ok) {
-        const errBody = await authRes.json().catch(() => ({}));
-        throw new Error(
-          errBody.error || `ImageKit auth failed: ${authRes.status}`
-        );
-      }
-
-      // 3) Parse JSON once and destructure
-      const data = await authRes.json();
-      const { authenticationParameters, publicKey } = data as {
-        authenticationParameters?: {
-          signature: string;
-          expire: number;
-          token: string;
-        };
-        publicKey?: string;
-      };
-
-      // 4) Guard against missing fields
-      if (
-        !authenticationParameters ||
-        !authenticationParameters.signature ||
-        !authenticationParameters.expire ||
-        !authenticationParameters.token ||
-        !publicKey
-      ) {
-        throw new Error("Invalid auth response from server");
-      }
-
-      // 5) Perform the upload
-      const { signature, expire, token } = authenticationParameters;
-      const res = await upload({
-        file,
-        fileName: file.name,
-        publicKey,
-        signature,
-        expire,
-        token,
+            // 5) Perform the upload
+            const { signature, expire, token } = authenticationParameters;
+            const res = await upload({
+                file,
+                fileName: file.name,
+                publicKey,
+                signature,
+                expire,
+                token,
                 onProgress: (event) => {
-                    if (event.lengthComputable && onProgress) {
+                    if (event.lengthComputable) {
                         const percent = (event.loaded / event.total) * 100;
                         setProgress(Math.round(percent));
+                        if (onProgress) onProgress(Math.round(percent));
                     }
                 },
             });
@@ -140,7 +118,7 @@ export default function FileUpload({
                     <span>Choose {fileType}</span>
                 </Button>
             </label>
-            {progress > 0 && <Progress value={progress} className="w-full" />}
+            {progress > 0 && <Progress value={progress} className="w-full mt-2" />}
         </div>
     );
 }

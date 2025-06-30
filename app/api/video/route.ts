@@ -7,13 +7,13 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET() {
     try {
         await dbConnect();
-        const vidoes = await Video.find({}).sort({ createdAt: -1 }).lean();
+        const videos = await Video.find({}).sort({ createdAt: -1 }).lean();
 
-        if (!vidoes || vidoes.length === 0) {
+        if (!videos || videos.length === 0) {
             return NextResponse.json([], { status: 404 });
         }
 
-        return NextResponse.json(vidoes, { status: 200 });
+        return NextResponse.json(videos, { status: 200 });
     } catch (error) {
         return NextResponse.json(
             { error: "Failed to fetch videos" },
